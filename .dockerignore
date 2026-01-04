@@ -1,0 +1,13 @@
+node_modules
+.pnpm-store
+npm-debug.log
+pnpm-debug.log
+dist
+coverage
+.tmp
+.git
+.gitignore
+Dockerfile
+README.md
+LICENSE
+vercel.json

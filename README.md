@@ -51,6 +51,18 @@ Since this project is built on top of Node.js so you need to [download](https://
   npm run start
   ```
 
+## Docker
+
+You can run the API together with Redis using Docker Compose:
+
+1. Copy `.env.example` to `.env` and fill the required values (especially `SPOTIFY_COOKIE`).
+2. Start the stack with the following command:
+   ```bash
+   docker compose up --build
+   ```
+3. The API is now reachable on http://localhost:3000 (or the value you set in `APP_PORT`).
+4. Update or stop the stack as needed with `docker compose down`, `docker compose up -d`, etc.
+
 ## API Documentation
 
 Please visit the [following page](https://lyricstify.github.io/api) to see the API documentation.

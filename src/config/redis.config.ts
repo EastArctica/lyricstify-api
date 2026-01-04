@@ -5,4 +5,8 @@ export default registerAs('redis', () => ({
   port: Number(process.env.REDIS_PORT) || undefined,
   password: process.env.REDIS_PASSWORD || undefined,
   ttl: Number(process.env.REDIS_TTL) || 5,
+  tlsEnabled:
+    process.env.REDIS_TLS !== undefined
+      ? process.env.REDIS_TLS === 'true'
+      : undefined,
 }));

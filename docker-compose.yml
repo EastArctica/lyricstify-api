@@ -1,0 +1,45 @@
+services:
+  api:
+    build:
+      context: .
+      target: production
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      APP_ENV: ${APP_ENV:-production}
+      APP_PORT: ${APP_PORT:-3000}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-password}
+      REDIS_TTL: ${REDIS_TTL:-604800000}
+      REDIS_TLS: ${REDIS_TLS:-false}
+    ports:
+      - "${APP_PORT:-3000}:${APP_PORT:-3000}"
+    depends_on:
+      - redis
+  redis:
+    image: redis:7-alpine
+    command:
+      [
+        "redis-server",
+        "--save",
+        "60",
+        "1",
+        "--loglevel",
+        "warning",
+        "--requirepass",
+        "${REDIS_PASSWORD:-password}",
+      ]
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  redis-data:
