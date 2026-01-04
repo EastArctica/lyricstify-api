@@ -1,7 +1,5 @@
 {
-  "regions": [
-    "sin1"
-  ],
+  "regions": ["sin1"],
   "build": {
     "env": {
       "NODEJS_AWS_HANDLER_NAME": "handler"

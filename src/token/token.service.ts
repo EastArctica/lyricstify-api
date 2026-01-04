@@ -23,7 +23,8 @@ export class TokenService {
     Cookie: this.configService.get<string>('app.spotifyCookie'),
   };
 
-  private readonly totpSecretHex: string = '333736313336333837353338343539383933383833333132333130393131393932383437313132343438383934343130323130353131323937313038';
+  private readonly totpSecretHex: string =
+    '333736313336333837353338343539383933383833333132333130393131393932383437313132343438383934343130323130353131323937313038';
   private readonly totpVersion: string = '61';
   private readonly totp = new TOTP({
     period: 30,
