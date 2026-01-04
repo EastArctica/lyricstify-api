@@ -19,7 +19,7 @@ describe('LyricController (e2e)', () => {
   const track: TrackEntity = createTrackEntity();
   const httpService = {
     get: jest.fn((url: string) => {
-      if (url === '/get_access_token') {
+      if (url === '/api/token') {
         return of(createAxiosResponse({ data: token }));
       }
 
