@@ -11,6 +11,7 @@ import { Cache } from 'cache-manager';
 import { firstValueFrom } from 'rxjs';
 import { httpCatchAxiosError } from '../common/http/http.catch-axios-error';
 import { TokenEntity } from './entities/token.entity';
+import { TOTP, Secret } from 'otpauth';
 
 @Injectable()
 export class TokenService {
@@ -22,6 +23,15 @@ export class TokenService {
     Cookie: this.configService.get<string>('app.spotifyCookie'),
   };
 
+  private readonly totpSecretHex: string = '333736313336333837353338343539383933383833333132333130393131393932383437313132343438383934343130323130353131323937313038';
+  private readonly totpVersion: string = '61';
+  private readonly totp = new TOTP({
+    period: 30,
+    algorithm: 'SHA1',
+    digits: 6,
+    secret: Secret.fromHex(this.totpSecretHex),
+  });
+
   constructor(
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
@@ -29,11 +39,18 @@ export class TokenService {
   ) {}
 
   async create() {
+    const code = this.totp.generate({ timestamp: Date.now() });
     const request$ = this.httpService
-      .get<TokenEntity>('/get_access_token', {
+      .get<TokenEntity>('/api/token', {
         baseURL: this.baseURL,
         headers: this.headers,
-        params: { reason: 'transport', productType: 'web_player' },
+        params: {
+          reason: 'init',
+          productType: 'web-player',
+          totp: code,
+          totpServer: code,
+          totpVer: this.totpVersion,
+        },
       })
       .pipe(
         httpCatchAxiosError({
